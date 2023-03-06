@@ -19,7 +19,7 @@ class Filter:
 
         # Check if the node has enough resources to run the pod
         cpu_check = int(node_rsrc["cpu"][0].split("m")[0]) >= int(pod_rqsts["cpu"].split("m")[0])
-        memory_check = int(node_rsrc["memory"][0].split("Gi")[0]) >= int(pod_rqsts["memory"].split("Gi")[0])
+        memory_check = int(node_rsrc["memory"][0].split("Ki")[0]) >= int(pod_rqsts["memory"].split("Ki")[0])
         pod_cap_check = int(node_rsrc["pod_cap"][0]) >= 1
 
         return cpu_check and memory_check and pod_cap_check
