@@ -18,7 +18,9 @@ class Scheduler:
         self.strategy = strategy
 
     def decision(self):
-        pod, node_score = self.strategy.scoring()
+        output = self.strategy.scoring()
+        pod = output['pod']
+        node_score = output['node_score']
         print(f"pod: {pod}, node_score: {node_score}")
         
         if pod is None:
