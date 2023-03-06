@@ -23,6 +23,7 @@ class Scheduler:
         if output is None:
             return (None, None)
 
+        print(output)
         pod = output['pod']
         node_score = output['node_score']
         print(f"pod: {pod}\nnode_score: {node_score}")
