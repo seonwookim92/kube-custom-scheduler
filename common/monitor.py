@@ -48,6 +48,15 @@ class Monitor:
         print("Get pod: " + pod_name)
         return self.core_api.read_namespaced_pod(name=pod_name, namespace="default")
     
+    def get_pod_rqsts(self, pod_name):
+        pod = self.get_pod(pod_name)
+        print("Get pod requests: " + pod.metadata.name)
+        pod_rqsts = {}
+        pod_rqsts["name"] = pod.metadata.name
+        pod_rqsts["cpu"] = pod.spec.containers[0].resources.requests["cpu"]
+        pod_rqsts["memory"] = pod.spec.containers[0].resources.requests["memory"]
+        return pod_rqsts
+
     def get_nodes(self):
         print("Get nodes")
         nodes = self.core_api.list_node()
@@ -68,7 +77,7 @@ class Monitor:
             node_rsrc = {}
             node_rsrc["cpu"] = (node.status.allocatable["cpu"], node.status.capacity["cpu"])
             node_rsrc["memory"] = (node.status.allocatable["memory"], node.status.capacity["memory"])
-            node_rsrc["pods"] = (node.status.allocatable["pods"], node.status.capacity["pods"])
+            node_rsrc["pod_cap"] = (node.status.allocatable["pods"], node.status.capacity["pods"])
             nodes_rsrc[node_name] = node_rsrc
     
         return nodes_rsrc
@@ -77,7 +86,8 @@ class Monitor:
         print("Get node resources: " + node_name)
         node = self.get_node(node_name)
         node_rsrc = {}
+        node_rsrc["name"] = node.metadata.name
         node_rsrc["cpu"] = (node.status.allocatable["cpu"], node.status.capacity["cpu"])
         node_rsrc["memory"] = (node.status.allocatable["memory"], node.status.capacity["memory"])
-        node_rsrc["pods"] = (node.status.allocatable["pods"], node.status.capacity["pods"])
+        node_rsrc["pod_cap"] = (node.status.allocatable["pods"], node.status.capacity["pods"])
         return node_rsrc
