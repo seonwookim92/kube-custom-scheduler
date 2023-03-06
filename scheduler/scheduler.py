@@ -19,12 +19,16 @@ class Scheduler:
 
     def decision(self):
         output = self.strategy.scoring()
+
+        if output is None:
+            return (None, None)
+
         pod = output['pod']
         node_score = output['node_score']
         print(f"pod: {pod}\nnode_score: {node_score}")
         
         if pod is None:
-            return None
+            return (None, None)
         else:
             # Get the node with the highest score
             node = max(node_score, key=node_score.get)
@@ -34,6 +38,7 @@ class Scheduler:
         pod = self.monitor.get_pod(pod_name)
         # Check if the pod is already scheduled
         if pod.status.phase == "Pending":
+            print(f"Pod [{pod_name}] is scheduled to node [{node_name}]")
             try:
                 # Binding the pod to the node
                 body = client.V1Binding(
@@ -52,7 +57,6 @@ class Scheduler:
                     body=body,
                     namespace="default"
                 )
-                print(f"Pod [{pod_name}] is scheduled to node [{node_name}]")
             except Exception as e:
                 # print(f"Exception when calling CoreV1Api->create_namespaced_binding: {e}")
                 pass
