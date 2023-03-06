@@ -38,8 +38,10 @@ class Scheduler:
                 namespace="default"
             ),
             target=client.V1ObjectReference(
+                api_version="v1",
                 kind="Node",
-                name=node
+                name=node,
+                namespace="default"
             )
         )
         self.core_api.create_namespaced_binding(
