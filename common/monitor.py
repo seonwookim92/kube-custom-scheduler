@@ -54,8 +54,8 @@ class Monitor:
         pod_rqsts = {}
         pod_rqsts["name"] = pod.metadata.name
         rqsts = pod.spec.containers[0].resources.requests
-        pod_rqsts["cpu"] = rqsts["cpu"] if rqsts else "1000m"
-        pod_rqsts["memory"] = rqsts["memory"] if rqsts else "1Gi"
+        pod_rqsts["cpu"] = rqsts["cpu"] if rqsts else "500m"
+        pod_rqsts["memory"] = rqsts["memory"] if rqsts else "500Mi"
         return pod_rqsts
     
     def get_nodes(self):
