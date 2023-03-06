@@ -1,8 +1,13 @@
-# Request size unit conversion
-# There exists three types of unit: Ki, Mi, Gi
-# The unit is used to represent the size of memory
-# Returns the size in Ki
-def convert_unit(size):
+def convert_cpu_unit(size):
+    # Returns the milicores
+    # If no units follow the number, assume it is a single core
+    if size[-1].isdigit():
+        return int(size) * 1000
+    # If the unit is "m", assume it is milicores
+    elif size[-1] == "m":
+        return int(size[:-1])
+
+def convert_memory_unit(size):
     if size[-2:] == "Ki":
         return int(size[:-2])
     elif size[-2:] == "Mi":

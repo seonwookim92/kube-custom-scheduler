@@ -1,6 +1,6 @@
 from kubernetes import client, config
 from common.monitor import Monitor
-from common.utils import convert_unit
+from common.utils import convert_cpu_unit, convert_memory_unit
 
 class Filter:
     def __init__(self):
@@ -19,8 +19,8 @@ class Filter:
         pod_rqsts = self.monitor.get_pod_rqsts(pod_name)
 
         # Check if the node has enough resources to run the pod
-        cpu_check = int(node_rsrc["cpu"][0].split("m")[0]) >= int(pod_rqsts["cpu"].split("m")[0])
-        memory_check = convert_unit(node_rsrc["memory"][0]) >= convert_unit(pod_rqsts["memory"])
+        cpu_check = convert_cpu_unit(node_rsrc["cpu"][0]) >= convert_cpu_unit(pod_rqsts["cpu"])
+        memory_check = convert_memory_unit(node_rsrc["memory"][0]) >= convert_memory_unit(pod_rqsts["memory"])
         pod_cap_check = int(node_rsrc["pod_cap"][0]) >= 1
 
         # Print the result
