@@ -23,6 +23,12 @@ class Filter:
         memory_check = convert_unit(node_rsrc["memory"][0]) >= convert_unit(pod_rqsts["memory"])
         pod_cap_check = int(node_rsrc["pod_cap"][0]) >= 1
 
+        # Print the result
+        print(f"Node {node_name} availablity check:")
+        print(f"CPU request: {pod_rqsts['cpu']}, available: {node_rsrc['cpu'][0]}")
+        print(f"Memory request: {pod_rqsts['memory']}, available: {node_rsrc['memory'][0]}")
+        print(f"Pod capacity request: 1, available: {node_rsrc['pod_cap'][0]}")
+
         return cpu_check and memory_check and pod_cap_check
     
     def get_available_nodes_name(self, pod_name):
