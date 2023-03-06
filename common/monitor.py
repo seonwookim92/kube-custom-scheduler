@@ -53,10 +53,11 @@ class Monitor:
         print("Get pod requests: " + pod.metadata.name)
         pod_rqsts = {}
         pod_rqsts["name"] = pod.metadata.name
-        pod_rqsts["cpu"] = pod.spec.containers[0].resources.requests["cpu"]
-        pod_rqsts["memory"] = pod.spec.containers[0].resources.requests["memory"]
+        rqsts = pod.spec.containers[0].resources.requests
+        pod_rqsts["cpu"] = rqsts["cpu"] if rqsts else "1000m"
+        pod_rqsts["memory"] = rqsts["memory"] if rqsts else "1Gi"
         return pod_rqsts
-
+    
     def get_nodes(self):
         print("Get nodes")
         nodes = self.core_api.list_node()
