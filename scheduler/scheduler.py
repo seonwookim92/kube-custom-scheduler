@@ -17,13 +17,11 @@ class Scheduler:
         self.filter = Filter()
         self.strategy = strategy
 
-    def decision(self):
+    def decision(self, debug=False):
         output = self.strategy.scoring()
 
-        if output is None:
-            return (None, None)
-
-        print(output)
+        if debug:
+            print(f"scoring output: {output}")
         pod = output['pod']
         node_score = output['node_score']
         print(f"pod: {pod}\nnode_score: {node_score}")
