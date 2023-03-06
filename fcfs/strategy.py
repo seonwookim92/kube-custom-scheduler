@@ -35,7 +35,7 @@ class FCFS:
             FCFS_output['pod'] = pod_name
             node_score = {}
             for node in available_nodes_name:
-                node_score[node] = 100 - (self.monitor.get_pods("Running")[0])
+                node_score[node] = 100 - len(self.monitor.get_pods("Running")[0])
             FCFS_output['node_score'] = node_score
         # Return the node_score dictionary
         return FCFS_output
