@@ -21,7 +21,7 @@ class Scheduler:
         output = self.strategy.scoring()
         pod = output['pod']
         node_score = output['node_score']
-        print(f"pod: {pod}, node_score: {node_score}")
+        print(f"pod: {pod}\nnode_score: {node_score}")
         
         if pod is None:
             return None
@@ -52,8 +52,9 @@ class Scheduler:
                     body=body,
                     namespace="default"
                 )
-                print(f"Pod {pod_name} is scheduled to node {node_name}")
+                print(f"Pod [{pod_name}] is scheduled to node [{node_name}]")
             except Exception as e:
-                print(f"Exception when calling CoreV1Api->create_namespaced_binding: {e}")
+                # print(f"Exception when calling CoreV1Api->create_namespaced_binding: {e}")
+                pass
         else:
             print(f"Pod {pod_name} is already scheduled to node {pod.spec.node_name}")

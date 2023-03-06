@@ -13,8 +13,9 @@ class Monitor:
         # Load the Kubernetes API client
         self.core_api = client.CoreV1Api()
 
-    def get_pending_pods(self):
-        print("Get pending pods")
+    def get_pending_pods(self, debug=False):
+        if debug:
+            print("Get pending pods")
         pending_pods = []
         pods = self.core_api.list_namespaced_pod(namespace="default")
         for pod in pods.items:
@@ -33,8 +34,9 @@ class Monitor:
         pending_pods_names = [pod.metadata.name for pod in pending_pods]
         return (pending_pods_names, pending_pods)
     
-    def get_pods(self, status="Running"):
-        print("Get pods with status: " + status)
+    def get_pods(self, status="Running", debug=False):
+        if debug:
+            print("Get pods with status: " + status)
         return_pods = []
         pods = self.core_api.list_namespaced_pod(namespace="default")
         for pod in pods.items:
@@ -44,13 +46,15 @@ class Monitor:
         return (return_pods_names, return_pods)
 
 
-    def get_pod(self, pod_name):
-        print("Get pod: " + pod_name)
+    def get_pod(self, pod_name, debug=False):
+        if debug:
+            print("Get pod: " + pod_name)
         return self.core_api.read_namespaced_pod(name=pod_name, namespace="default")
     
-    def get_pod_rqsts(self, pod_name):
+    def get_pod_rqsts(self, pod_name, debug=False):
         pod = self.get_pod(pod_name)
-        print("Get pod requests: " + pod.metadata.name)
+        if debug:
+            print("Get pod requests: " + pod.metadata.name)
         pod_rqsts = {}
         pod_rqsts["name"] = pod.metadata.name
         rqsts = pod.spec.containers[0].resources.requests
@@ -58,18 +62,21 @@ class Monitor:
         pod_rqsts["memory"] = rqsts["memory"] if rqsts else "500Mi"
         return pod_rqsts
     
-    def get_nodes(self):
-        print("Get nodes")
+    def get_nodes(self, debug=False):
+        if debug:
+            print("Get nodes")
         nodes = self.core_api.list_node()
         node_names = [node.metadata.name for node in nodes.items]
         return (node_names, nodes.items)
     
-    def get_node(self, node_name):
-        print("Get node: " + node_name)
+    def get_node(self, node_name, debug=False):
+        if debug:
+            print("Get node: " + node_name)
         return self.core_api.read_node(name=node_name)
     
-    def get_nodes_rsrc(self):
-        print("Get nodes resources")
+    def get_nodes_rsrc(self, debug=False):
+        if debug:
+            print("Get nodes resources")
         nodes = self.get_nodes()[1]
 
         nodes_rsrc = {}
@@ -83,8 +90,9 @@ class Monitor:
     
         return nodes_rsrc
     
-    def get_node_rsrc(self, node_name):
-        print("Get node resources: " + node_name)
+    def get_node_rsrc(self, node_name, debug=False):
+        if debug:
+            print("Get node resources: " + node_name)
         node = self.get_node(node_name)
         node_rsrc = {}
         node_rsrc["name"] = node.metadata.name

@@ -36,7 +36,7 @@ class FCFS:
             node_score = {}
             for node in available_nodes_name:
                 # Exclude the controlplane node
-                if node == "controlplane":
+                if node == "controlplane" or node == "node-0":
                     continue
                 node_score[node] = 100 - len(self.monitor.get_pods("Running")[0])
             FCFS_output['node_score'] = node_score
