@@ -31,6 +31,19 @@ class Scheduler:
             return (pod, node)
     
     def scheduling(self, pod, node):
-        # Bind the pod to the node
-        self.core_api.patch_namespaced_pod(pod, "default", {"spec": {"nodeName": node}})
-        print(f"Pod {pod} scheduled on node {node}")
+        # Binding the pod to the node
+        body = client.V1Binding(
+            metadata=client.V1ObjectMeta(
+                name=pod,
+                namespace="default"
+            ),
+            target=client.V1ObjectReference(
+                kind="Node",
+                name=node
+            )
+        )
+        self.core_api.create_namespaced_binding(
+            body=body,
+            namespace="default"
+        )
+        print(f"Pod {pod} is scheduled to node {node}")
