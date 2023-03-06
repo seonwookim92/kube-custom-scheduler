@@ -34,23 +34,26 @@ class Scheduler:
         pod = self.monitor.get_pod(pod_name)
         # Check if the pod is already scheduled
         if pod.status.phase == "Pending":
-            # Binding the pod to the node
-            body = client.V1Binding(
-                metadata=client.V1ObjectMeta(
-                    name=pod_name,
-                    namespace="default"
-                ),
-                target=client.V1ObjectReference(
-                    api_version="v1",
-                    kind="Node",
-                    name=node_name,
+            try:
+                # Binding the pod to the node
+                body = client.V1Binding(
+                    metadata=client.V1ObjectMeta(
+                        name=pod_name,
+                        namespace="default"
+                    ),
+                    target=client.V1ObjectReference(
+                        api_version="v1",
+                        kind="Node",
+                        name=node_name,
+                        namespace="default"
+                    )
+                )
+                self.core_api.create_namespaced_binding(
+                    body=body,
                     namespace="default"
                 )
-            )
-            self.core_api.create_namespaced_binding(
-                body=body,
-                namespace="default"
-            )
-            print(f"Pod {pod_name} is scheduled to node {node_name}")
+                print(f"Pod {pod_name} is scheduled to node {node_name}")
+            except Exception as e:
+                print(f"Exception when calling CoreV1Api->create_namespaced_binding: {e}")
         else:
             print(f"Pod {pod_name} is already scheduled to node {pod.spec.node_name}")
