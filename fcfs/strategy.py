@@ -36,11 +36,17 @@ class FCFS:
             # The more running pods a node has, the lower the score
             FCFS_output['pod'] = pod_name
             node_score = {}
-            for node in available_nodes_name:
+            for node_name in available_nodes_name:
                 # Exclude the controlplane node
-                if node == "controlplane" or node == "node-0":
+                if node_name == "controlplane" or node_name == "node-0":
                     continue
-                node_score[node] = 100 - len(self.monitor.get_node(node).status.pod_ids)
+
+                pods = self.core_api.list_pod_for_all_namespaces(field_selector=f"spec.nodeName={node_name}").items
+                running_pods = [pod for pod in pods if pod.status.phase == "Running"]
+                num_running_pods = len(running_pods)
+
+                node_score[node_name] = 100 - num_running_pods
+                
             FCFS_output['node_score'] = node_score
             
         # Return the node_score dictionary
