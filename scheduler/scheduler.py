@@ -30,22 +30,27 @@ class Scheduler:
             node = max(node_score, key=node_score.get)
             return (pod, node)
     
-    def scheduling(self, pod, node):
-        # Binding the pod to the node
-        body = client.V1Binding(
-            metadata=client.V1ObjectMeta(
-                name=pod,
-                namespace="default"
-            ),
-            target=client.V1ObjectReference(
-                api_version="v1",
-                kind="Node",
-                name=node,
+    def scheduling(self, pod_name, node_name):
+        pod = self.monitor.get_pod(pod_name)
+        # Check if the pod is already scheduled
+        if pod.status.phase == "Pending":
+            # Binding the pod to the node
+            body = client.V1Binding(
+                metadata=client.V1ObjectMeta(
+                    name=pod_name,
+                    namespace="default"
+                ),
+                target=client.V1ObjectReference(
+                    api_version="v1",
+                    kind="Node",
+                    name=node_name,
+                    namespace="default"
+                )
+            )
+            self.core_api.create_namespaced_binding(
+                body=body,
                 namespace="default"
             )
-        )
-        self.core_api.create_namespaced_binding(
-            body=body,
-            namespace="default"
-        )
-        print(f"Pod {pod} is scheduled to node {node}")
+            print(f"Pod {pod_name} is scheduled to node {node_name}")
+        else:
+            print(f"Pod {pod_name} is already scheduled to node {pod.spec.node_name}")
