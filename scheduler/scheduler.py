@@ -3,6 +3,8 @@ from common.monitor import Monitor
 from common.filter import Filter
 from fcfs.strategy import FCFS
 
+import random
+
 class Scheduler:
     def __init__(self, cfg=None, strategy=FCFS()):
         # Load the Kubernetes configuration
@@ -30,7 +32,10 @@ class Scheduler:
             return (None, None)
         else:
             # Get the node with the highest score
-            node = max(node_score, key=node_score.get)
+            # Randomly choose if there are multiple nodes with the same score
+            max_score = max(node_score.values())
+            max_score_nodes = [node for node, score in node_score.items() if score == max_score]
+            node = random.choice(max_score_nodes)
             return (pod, node)
     
     def scheduling(self, pod_name, node_name):

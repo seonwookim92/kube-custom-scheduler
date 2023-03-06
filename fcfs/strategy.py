@@ -29,6 +29,7 @@ class FCFS:
             FCFS_output['node_score'] = None
             return FCFS_output
         else:
+            # Get the first pending pod (FCFS)
             pod_name = pending_pods_name[0]
             # Get the available nodes
             available_nodes_name = self.filter.get_available_nodes_name(pod_name)
@@ -46,7 +47,7 @@ class FCFS:
                 num_running_pods = len(running_pods)
 
                 node_score[node_name] = 100 - num_running_pods
-                
+
             FCFS_output['node_score'] = node_score
             
         # Return the node_score dictionary
