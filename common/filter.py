@@ -25,8 +25,8 @@ class Filter:
 
         # Print the result
         print(f"Node {node_name} availablity check:")
-        print(f"CPU request: {pod_rqsts['cpu']}, available: {node_rsrc['cpu'][0]}")
-        print(f"Memory request: {pod_rqsts['memory']}, available: {node_rsrc['memory'][0]}")
+        print(f"CPU request: {convert_cpu_unit(pod_rqsts['cpu'])}m, available: {convert_cpu_unit(node_rsrc['cpu'][0])}m")
+        print(f"Memory request: {convert_memory_unit(pod_rqsts['memory'])}Ki, available: {convert_memory_unit(node_rsrc['memory'][0])}Ki")
         print(f"Pod capacity request: 1, available: {node_rsrc['pod_cap'][0]}")
 
         return cpu_check and memory_check and pod_cap_check
