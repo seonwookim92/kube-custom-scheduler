@@ -19,12 +19,12 @@ class Scheduler:
 
     def decision(self):
         pod, node_score = self.strategy.scoring()
+        print(f"pod: {pod}, node_score: {node_score}")
         if pod is None:
             return None
         else:
             # Get the node with the highest score
             node = max(node_score, key=node_score.get)
-            # Return the pod and the node
             return (pod, node)
     
     def scheduling(self, pod, node):
