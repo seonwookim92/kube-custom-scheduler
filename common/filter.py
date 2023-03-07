@@ -11,7 +11,7 @@ class Filter:
         self.running_pods = self.monitor.get_pods("Running")
         self.nodes = self.monitor.get_nodes()
 
-    def check_available(self, pod_name, node_name):    
+    def check_available(self, pod_name, node_name, debug=False):    
         # Get the node resources
         node_rsrc = self.monitor.get_node_rsrc(node_name)
 
@@ -24,10 +24,11 @@ class Filter:
         pod_cap_check = int(node_rsrc["pod_cap"][0]) >= 1
 
         # Print the result
-        print(f"Node {node_name} availablity check:")
-        print(f"CPU request: {convert_cpu_unit(pod_rqsts['cpu'])}m, available: {convert_cpu_unit(node_rsrc['cpu'][0])}m")
-        print(f"Memory request: {convert_memory_unit(pod_rqsts['memory'])}Ki, available: {convert_memory_unit(node_rsrc['memory'][0])}Ki")
-        print(f"Pod capacity request: 1, available: {node_rsrc['pod_cap'][0]}")
+        if debug:
+            print(f"Node {node_name} availablity check:")
+            print(f"CPU request: {convert_cpu_unit(pod_rqsts['cpu'])}m, available: {convert_cpu_unit(node_rsrc['cpu'][0])}m")
+            print(f"Memory request: {convert_memory_unit(pod_rqsts['memory'])}Ki, available: {convert_memory_unit(node_rsrc['memory'][0])}Ki")
+            print(f"Pod capacity request: 1, available: {node_rsrc['pod_cap'][0]}")
 
         return cpu_check and memory_check and pod_cap_check
     
