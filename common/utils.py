@@ -6,6 +6,8 @@ def convert_cpu_unit(size):
     # If the unit is "m", assume it is milicores
     elif size[-1] == "m":
         return int(size[:-1])
+    elif size[-1] == "n":
+        return float(size[:-1]) / 1000
 
 def convert_memory_unit(size):
     if size[-2:] == "Ki":
